@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using quest_web;
@@ -7,6 +8,7 @@ using quest_web.Controllers;
 using quest_web.Models;
 using quest_web.Utils;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace TestProject1
 {
@@ -14,41 +16,74 @@ namespace TestProject1
     {
         
         private readonly JwtTokenUtil _jwt;
-        private ApiDbContext dbContextOptions;
-        
-        public TestAuthentification()
+        private readonly ITestOutputHelper _output;
+        private readonly ApiDbContext _context;
+
+        public TestAuthentification(ITestOutputHelper output)
         {
             _jwt = new JwtTokenUtil();
-        }
-        
-        [Fact]
-        public async Task Test_Register_POST()
-        {
+            _output = output;
             const string connectionString = "server=127.0.0.1;database=quest_web;user=root;password=;";
             var builder = new DbContextOptionsBuilder<ApiDbContext>();
             builder.UseMySql(connectionString);
             var options = builder.Options;
-            var context = new ApiDbContext(options);
-            
+            _context = new ApiDbContext(options);
+        }
+        
+        [Fact]
+        public async Task Test_Register_POST_Bad_Request()
+        {
             // Arrange
             var user = new User()
             {
-                Username = "Drissa",
-                Password = "123",
+                Username = "Kone",
             };
-            // user.Creation_Date = DateTime.Now;
-            // user.Updated_Date = user.Creation_Date;
-
-            var mockRepo = new Mock<ApiDbContext>();
-            mockRepo.Setup(repo => repo.Set<User>());
-            
-            var controller = new AuthenticationController(context, _jwt);
+            var controller = new AuthenticationController(_context, _jwt);
 
             // Act
             var result = controller.Register(user);
             
             // Assert
-            Console.WriteLine(result);
+            BadRequestObjectResult objectResponse = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal(400, objectResponse.StatusCode);
+        }
+        
+        [Fact]
+        public async Task Test_Register_POST_Not_Work_Conflict()
+        {
+            // Arrange
+            var user = new User()
+            {
+                Username = "Kone",
+                Password = "123",
+            };
+            var controller = new AuthenticationController(_context, _jwt);
+
+            // Act
+            var result = controller.Register(user);
+            
+            // Assert
+            ConflictObjectResult objectResponse = Assert.IsType<ConflictObjectResult>(result);
+            Assert.Equal(409, objectResponse.StatusCode);
+        }
+        
+        [Fact]
+        public async Task Test_Register_POST_Work()
+        {
+            // Arrange
+            var user = new User()
+            {
+                Username = "Kone",
+                Password = "123",
+            };
+            var controller = new AuthenticationController(_context, _jwt);
+
+            // Act
+            var result = controller.Register(user);
+            
+            // Assert
+            ObjectResult objectResponse = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(201, objectResponse.StatusCode);
         }
     }
 }
