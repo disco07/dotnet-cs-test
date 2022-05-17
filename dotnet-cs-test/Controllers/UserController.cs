@@ -32,11 +32,6 @@ namespace quest_web.Controllers
             string token = accessToken.ToString();
             var currentUser = _context.Users.FirstOrDefault(u => u.Username ==  _jwt.GetUsernameFromToken(token));
 
-            // if (currentUser == null)
-            // {
-            //     return NotFound();
-            // }
-
             var list = _context.Users.ToList();
             if (list == null)
                 return null;

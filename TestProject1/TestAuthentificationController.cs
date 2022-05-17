@@ -14,8 +14,8 @@ namespace TestProject1
     {
         
         private readonly JwtTokenUtil _jwt;
-        private DbContextOptionsBuilder<ApiDbContext> dbContextOptions = new DbContextOptionsBuilder<ApiDbContext>();
-
+        private ApiDbContext dbContextOptions;
+        
         public TestAuthentification()
         {
             _jwt = new JwtTokenUtil();
@@ -24,6 +24,12 @@ namespace TestProject1
         [Fact]
         public async Task Test_Register_POST()
         {
+            const string connectionString = "server=127.0.0.1;database=quest_web;user=root;password=;";
+            var builder = new DbContextOptionsBuilder<ApiDbContext>();
+            builder.UseMySql(connectionString);
+            var options = builder.Options;
+            var context = new ApiDbContext(options);
+            
             // Arrange
             var user = new User()
             {
@@ -34,9 +40,9 @@ namespace TestProject1
             // user.Updated_Date = user.Creation_Date;
 
             var mockRepo = new Mock<ApiDbContext>();
-            mockRepo.Setup(repo => repo.Set<User>()).Returns(user);
+            mockRepo.Setup(repo => repo.Set<User>());
             
-            var controller = new AuthenticationController(mockRepo.Object, _jwt);
+            var controller = new AuthenticationController(context, _jwt);
 
             // Act
             var result = controller.Register(user);
