@@ -18,6 +18,7 @@ namespace TestProject1
         private readonly JwtTokenUtil _jwt;
         private readonly ITestOutputHelper _output;
         private readonly ApiDbContext _context;
+        private readonly string _myuuidAsString;
 
         public TestAuthentification(ITestOutputHelper output)
         {
@@ -28,6 +29,8 @@ namespace TestProject1
             builder.UseMySql(connectionString);
             var options = builder.Options;
             _context = new ApiDbContext(options);
+            Guid myuuid = Guid.NewGuid();
+            _myuuidAsString = myuuid.ToString();
         }
         
         [Fact]
@@ -54,12 +57,14 @@ namespace TestProject1
             // Arrange
             var user = new User()
             {
-                Username = "Kone",
+                Username = "Kone" + _myuuidAsString,
                 Password = "123",
             };
+            _output.WriteLine(_myuuidAsString);
             var controller = new AuthenticationController(_context, _jwt);
 
             // Act
+            controller.Register(user);
             var result = controller.Register(user);
             
             // Assert
@@ -73,9 +78,10 @@ namespace TestProject1
             // Arrange
             var user = new User()
             {
-                Username = "Kone",
+                Username = "Kone" + _myuuidAsString,
                 Password = "123",
             };
+            _output.WriteLine(_myuuidAsString);
             var controller = new AuthenticationController(_context, _jwt);
 
             // Act
@@ -84,6 +90,84 @@ namespace TestProject1
             // Assert
             ObjectResult objectResponse = Assert.IsType<ObjectResult>(result);
             Assert.Equal(201, objectResponse.StatusCode);
+        }
+        
+        [Fact]
+        public async Task Test_Authenticate_Work()
+        {
+            // Arrange
+            var user = new User()
+            {
+                Username = "drissakone",
+                Password = "123",
+            };
+            var controller = new AuthenticationController(_context, _jwt);
+
+            // Act
+            controller.Register(user);
+            var result = controller.Authenticate(user);
+            
+            // Assert
+            OkObjectResult objectResponse = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(200, objectResponse.StatusCode);
+            _output.WriteLine(result.ToString());
+        }
+        
+        [Fact]
+        public async Task Test_Authenticate_not_Work_Invalid_Password()
+        {
+            // Arrange
+            var user = new User()
+            {
+                Username = "Kone",
+                Password = "1234",
+            };
+            var controller = new AuthenticationController(_context, _jwt);
+
+            // Act
+            var result = controller.Authenticate(user);
+            
+            // Assert
+            ObjectResult objectResponse = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(401, objectResponse.StatusCode);
+        }
+        
+        [Fact]
+        public async Task Test_Authenticate_not_Work_Invalid_USER()
+        {
+            // Arrange
+            var user = new User()
+            {
+                Username = "invaliduser",
+                Password = "1234",
+            };
+            var controller = new AuthenticationController(_context, _jwt);
+
+            // Act
+            var result = controller.Authenticate(user);
+            
+            // Assert
+            ObjectResult objectResponse = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(401, objectResponse.StatusCode);
+        }
+        
+        [Fact]
+        public async Task Test_Me_not_Work_Invalid_USER()
+        {
+            // Arrange
+            var user = new User()
+            {
+                Username = "invaliduser",
+                Password = "1234",
+            };
+            var controller = new AuthenticationController(_context, _jwt);
+
+            // Act
+            var result = controller.Authenticate(user);
+            
+            // Assert
+            ObjectResult objectResponse = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(401, objectResponse.StatusCode);
         }
     }
 }
