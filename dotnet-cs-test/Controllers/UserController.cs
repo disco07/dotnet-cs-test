@@ -15,14 +15,12 @@ namespace quest_web.Controllers
     [Route("[controller]")]
     public class UserController : Controller
     {
-        private readonly ILogger<DefaultController> _logger;
         private readonly ApiDbContext _context;
         private readonly JwtTokenUtil _jwt;
 
-        public UserController(ILogger<DefaultController> logger, ApiDbContext context, JwtTokenUtil jwt)
+        public UserController(ApiDbContext context, JwtTokenUtil jwt)
         {
             _context = context;
-            _logger = logger;
             _jwt = jwt;
         }
 
@@ -33,6 +31,11 @@ namespace quest_web.Controllers
             var accessToken = await HttpContext.GetTokenAsync("access_token");
             string token = accessToken.ToString();
             var currentUser = _context.Users.FirstOrDefault(u => u.Username ==  _jwt.GetUsernameFromToken(token));
+
+            // if (currentUser == null)
+            // {
+            //     return NotFound();
+            // }
 
             var list = _context.Users.ToList();
             if (list == null)

@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\konee\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\konee\\.nuget\\packages"
+    ]
+  }
+}

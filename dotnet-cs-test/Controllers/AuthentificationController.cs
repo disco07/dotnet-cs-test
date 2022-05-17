@@ -15,14 +15,12 @@ namespace quest_web.Controllers
     [Route("[controller]")]
     public class AuthenticationController : Controller
     {
-        private readonly ILogger<DefaultController> _logger;
         private readonly ApiDbContext _context;
         private readonly JwtTokenUtil _jwt;
 
-        public AuthenticationController(ILogger<DefaultController> logger, ApiDbContext context, JwtTokenUtil jwt)
+        public AuthenticationController(ApiDbContext context, JwtTokenUtil jwt)
         {
             _context = context;
-            _logger = logger;
             _jwt = jwt;
         }
 
