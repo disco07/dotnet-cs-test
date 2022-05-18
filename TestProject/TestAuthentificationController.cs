@@ -153,20 +153,5 @@ namespace TestProject1
             ObjectResult objectResponse = Assert.IsType<ObjectResult>(result);
             Assert.Equal(401, objectResponse.StatusCode);
         }
-        
-        // [Fact]
-        // public async Task Test_Me_Work()
-        // {
-        //     // Arrange
-        //     var controller = new AuthenticationController(_context, _jwt);
-        //
-        //     // Act
-        //     var result = controller.Me();
-        //     _output.WriteLine(result.Result.ToString());
-        //     
-        //     // Assert
-        //     // ObjectResult objectResponse = Assert.IsType<ObjectResult>(result);
-        //     // Assert.Equal(401, objectResponse.StatusCode);
-        // }
     }
 }
