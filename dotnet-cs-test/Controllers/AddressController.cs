@@ -16,9 +16,9 @@ namespace quest_web.Controllers
     [Route("[controller]")]
     public class AddressController : Controller
     {
-        private readonly ILogger<DefaultController> _logger;
         private readonly ApiDbContext _context;
         private readonly JwtTokenUtil _jwt;
+        private readonly ILogger<DefaultController> _logger;
 
         public AddressController(ILogger<DefaultController> logger, ApiDbContext context, JwtTokenUtil jwt)
         {
@@ -29,14 +29,17 @@ namespace quest_web.Controllers
 
         [Authorize]
         [HttpPost("/address")]
-        public async Task<Address> CreateAddress([FromBody]Address address)
+        public async Task<Address> CreateAddress([FromBody] Address address)
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
-            string token = accessToken.ToString();
+            var token = accessToken;
             var username = _jwt.GetUsernameFromToken(token);
             var currentUser = _context.Users.FirstOrDefault(u => u.Username == username);
 
-            Address _address = new Address { road = address.road, postalCode = address.postalCode, city = address.city, country = address.country };
+            var _address = new Address
+            {
+                road = address.road, postalCode = address.postalCode, city = address.city, country = address.country
+            };
             _address.creationDate = DateTime.Now;
             _address.updatedDate = DateTime.Now;
             _address.User = currentUser.ID;
@@ -53,7 +56,7 @@ namespace quest_web.Controllers
         public async Task<IEnumerable<Address>> GetAddress()
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
-            string token = accessToken.ToString();
+            var token = accessToken;
             var username = _jwt.GetUsernameFromToken(token);
             var currentUser = _context.Users.FirstOrDefault(u => u.Username == username);
 
@@ -69,7 +72,7 @@ namespace quest_web.Controllers
         public async Task<Address> GetAddressById(int id)
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
-            string token = accessToken.ToString();
+            var token = accessToken;
             var username = _jwt.GetUsernameFromToken(token);
             var currentUser = _context.Users.FirstOrDefault(u => u.Username == username);
 
@@ -85,14 +88,14 @@ namespace quest_web.Controllers
         public async Task<Address> ChangeAddress(int id, [FromBody] Address address)
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
-            string token = accessToken.ToString();
+            var token = accessToken;
             var username = _jwt.GetUsernameFromToken(token);
             var currentUser = _context.Users.FirstOrDefault(u => u.Username == username);
 
             var currentAddress = _context.Address.FirstOrDefault(u => u.id == id);
             if (currentAddress == null)
                 return null;
-            
+
             if (address.road != null)
                 currentAddress.road = address.road;
             if (address.city != null)
@@ -101,34 +104,37 @@ namespace quest_web.Controllers
                 currentAddress.postalCode = address.postalCode;
             if (address.country != null)
                 currentAddress.country = address.country;
-            
-            if (currentUser.Role.Equals(UserRole.ROLE_ADMIN) || currentUser.ID == currentAddress.User ) {
+
+            if (currentUser.Role.Equals(UserRole.ROLE_ADMIN) || currentUser.ID == currentAddress.User)
+            {
                 _context.Update(currentAddress);
                 await _context.SaveChangesAsync();
                 return currentAddress;
             }
+
             return null;
         }
 
         [Authorize]
         [HttpDelete("/address/{id}")]
-        public async Task<String> DeleteAddressById(int id)
+        public async Task<string> DeleteAddressById(int id)
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
-            string token = accessToken.ToString();
+            var token = accessToken;
             var username = _jwt.GetUsernameFromToken(token);
             var currentUser = _context.Users.FirstOrDefault(u => u.Username == username);
 
             var currentAddress = _context.Address.FirstOrDefault(u => u.id == id);
             if (currentAddress == null)
                 return "Echec";
-            if (currentUser.Role.Equals(UserRole.ROLE_ADMIN)|| currentUser.ID == currentAddress.User ) {
+            if (currentUser.Role.Equals(UserRole.ROLE_ADMIN) || currentUser.ID == currentAddress.User)
+            {
                 _context.Remove(currentAddress);
                 await _context.SaveChangesAsync();
                 return "Success";
             }
+
             return "Error";
         }
-
     }
 }

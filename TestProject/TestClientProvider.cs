@@ -7,12 +7,13 @@ namespace TestProject1
 {
     public class TestClientProvider
     {
-        public HttpClient Client { get; set; }
         public TestClientProvider()
         {
             var server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
 
             Client = server.CreateClient();
         }
+
+        public HttpClient Client { get; set; }
     }
 }

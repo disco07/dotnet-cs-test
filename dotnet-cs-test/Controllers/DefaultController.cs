@@ -8,6 +8,7 @@ namespace quest_web.Controllers
     public class DefaultController : Controller
     {
         private readonly ILogger<DefaultController> _logger;
+
         public DefaultController(ILogger<DefaultController> logger)
         {
             _logger = logger;
