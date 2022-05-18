@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "MlCV9O+xBUiieXfY5/qJ2Wd89qZFLcQGZOmhcUyNW1ve5VIYtAvuSoElGuGjUyLm8KU8FXrW0k602yGKNZ/VXg==",
+  "dgSpecHash": "B4SEF1Z3HIVUuSJ1higqsNsd0VUubZUXgJpJ3t+G4k8gyYwXNkCBIpeaw/2S04qpwMIkeU2m+JbuRrRaGI607w==",
   "success": true,
   "projectFilePath": "C:\\Users\\konee\\source\\repos\\dotnet-cs-test\\TestProject\\TestProject.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\konee\\.nuget\\packages\\castle.core\\5.0.0\\castle.core.5.0.0.nupkg.sha512",
     "C:\\Users\\konee\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",
     "C:\\Users\\konee\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.11\\microsoft.aspnetcore.authentication.jwtbearer.3.1.11.nupkg.sha512",
+    "C:\\Users\\konee\\.nuget\\packages\\microsoft.aspnetcore.testhost\\3.1.0\\microsoft.aspnetcore.testhost.3.1.0.nupkg.sha512",
     "C:\\Users\\konee\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\konee\\.nuget\\packages\\microsoft.bcl.hashcode\\1.1.0\\microsoft.bcl.hashcode.1.1.0.nupkg.sha512",
     "C:\\Users\\konee\\.nuget\\packages\\microsoft.codecoverage\\17.1.0\\microsoft.codecoverage.17.1.0.nupkg.sha512",
@@ -84,6 +85,7 @@
     "C:\\Users\\konee\\.nuget\\packages\\system.io.compression.zipfile\\4.3.0\\system.io.compression.zipfile.4.3.0.nupkg.sha512",
     "C:\\Users\\konee\\.nuget\\packages\\system.io.filesystem\\4.3.0\\system.io.filesystem.4.3.0.nupkg.sha512",
     "C:\\Users\\konee\\.nuget\\packages\\system.io.filesystem.primitives\\4.3.0\\system.io.filesystem.primitives.4.3.0.nupkg.sha512",
+    "C:\\Users\\konee\\.nuget\\packages\\system.io.pipelines\\4.7.0\\system.io.pipelines.4.7.0.nupkg.sha512",
     "C:\\Users\\konee\\.nuget\\packages\\system.linq\\4.3.0\\system.linq.4.3.0.nupkg.sha512",
     "C:\\Users\\konee\\.nuget\\packages\\system.linq.expressions\\4.3.0\\system.linq.expressions.4.3.0.nupkg.sha512",
     "C:\\Users\\konee\\.nuget\\packages\\system.net.http\\4.3.0\\system.net.http.4.3.0.nupkg.sha512",

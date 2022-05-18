@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -22,18 +23,24 @@ namespace TestProject1
         private readonly ITestOutputHelper _output;
         private readonly ApiDbContext _context;
         private readonly string _myuuidAsString;
+        private readonly HttpClient _client;
 
         public TestAuthentification(ITestOutputHelper output)
         {
             _jwt = new JwtTokenUtil();
+            
             _output = output;
+            
             const string connectionString = "server=127.0.0.1;database=quest_web;user=root;password=;";
             var builder = new DbContextOptionsBuilder<ApiDbContext>();
             builder.UseMySql(connectionString);
             var options = builder.Options;
             _context = new ApiDbContext(options);
+            
             Guid myuuid = Guid.NewGuid();
             _myuuidAsString = myuuid.ToString();
+
+            _client = new TestClientProvider().Client;
         }
         
         [Fact]
@@ -152,6 +159,18 @@ namespace TestProject1
             // Assert
             ObjectResult objectResponse = Assert.IsType<ObjectResult>(result);
             Assert.Equal(401, objectResponse.StatusCode);
+        }
+        
+        [Fact]
+        public async Task Test_Me_not_Work_Access_Denied()
+        {
+            // Arrange
+            var response = await _client.GetAsync("/testSuccess");
+
+            // Act
+            response.EnsureSuccessStatusCode();
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }

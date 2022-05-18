@@ -136,3 +136,4 @@ C:\Users\konee\source\repos\dotnet-cs-test\TestProject\obj\Debug\netcoreapp3.1\T
 C:\Users\konee\source\repos\dotnet-cs-test\TestProject\obj\Debug\netcoreapp3.1\TestProject.dll
 C:\Users\konee\source\repos\dotnet-cs-test\TestProject\obj\Debug\netcoreapp3.1\TestProject.pdb
 C:\Users\konee\source\repos\dotnet-cs-test\TestProject\obj\Debug\netcoreapp3.1\TestProject.genruntimeconfig.cache
+C:\Users\konee\source\repos\dotnet-cs-test\TestProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.TestHost.dll
