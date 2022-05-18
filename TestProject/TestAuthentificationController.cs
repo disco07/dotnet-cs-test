@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 using Moq;
 using quest_web;
 using quest_web.Controllers;
@@ -153,32 +154,19 @@ namespace TestProject1
             Assert.Equal(401, objectResponse.StatusCode);
         }
         
-        [Fact]
-        public async Task Test_Me_Work()
-        {
-            using (var server = TestServer.Create<Startup>())
-            {
-                var response = await server
-                    .CreateRequest("/api/action-to-test")
-                    .AddHeader("Content-type", "application/json")
-                    .AddHeader("Authorization", "Bearer <insert token here>")
-                    .GetAsync();
-
-                // Do what you want to with the response from the api. 
-                // You can assert status code for example.
-
-            }
-            // Arrange
-            var controller = new AuthenticationController(_context, _jwt);
-            controller.Request.Headers["Bearer"] = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZHJpc3NhIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjUyODE3MzA3fQ.SFrrvXL7t8ZzA9Bds3T9I9m4PFitaVr78lepftRnO8C8riBvJvejWV1BqQCeL7Q4rBPk4k-AbfF4fj1Jhzg1Rw";
-
-            // Act
-            var result = controller.Me();
-            _output.WriteLine(result.Result.ToString());
-            
-            // Assert
-            // ObjectResult objectResponse = Assert.IsType<ObjectResult>(result);
-            // Assert.Equal(401, objectResponse.StatusCode);
-        }
+        // [Fact]
+        // public async Task Test_Me_Work()
+        // {
+        //     // Arrange
+        //     var controller = new AuthenticationController(_context, _jwt);
+        //
+        //     // Act
+        //     var result = controller.Me();
+        //     _output.WriteLine(result.Result.ToString());
+        //     
+        //     // Assert
+        //     // ObjectResult objectResponse = Assert.IsType<ObjectResult>(result);
+        //     // Assert.Equal(401, objectResponse.StatusCode);
+        // }
     }
 }
