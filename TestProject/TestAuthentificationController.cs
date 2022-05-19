@@ -1,9 +1,11 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using quest_web;
 using quest_web.Controllers;
 using quest_web.Models;
@@ -162,14 +164,20 @@ namespace TestProject1
         public async Task Test_Me_Access_Denied()
         {
             // Arrange
-            _client.DefaultRequestHeaders.Add("Authorization",
-                "Bearer " +
-                "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZHJpc3NhIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjUyODg4NTcwfQ.1BRMIvvu5FRZT2RaHO6DE5A-f--s7yIWsOyoATNBuHTiIIhIYswYwGbPQWyO3Hioelf5X4o-hYfUCBNMvYzfxQ");
-            var response = await _client.GetAsync("/me");
+            var response = await _client.PostAsync("/authenticate", new StringContent(
+                JsonConvert.SerializeObject(new User
+                {
+                    Username = "drissakone",
+                    Password = "123"
+                }), 
+                Encoding.UTF8, 
+                "application/json"));
+            
             _output.WriteLine(response.ToString());
+            response.EnsureSuccessStatusCode();
 
             // Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }

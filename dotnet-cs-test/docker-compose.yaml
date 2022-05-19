@@ -1,0 +1,32 @@
+﻿version: "3.7"
+services:
+
+  mysql:
+    image: mysql:latest
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: quest_web
+      TZ: Europe/Brussels
+    ports:
+      - "3306:3306"
+    networks:
+      - dotnet-network
+
+  dotnetapp:
+    build: .
+    ports:
+      - "9000:9000"
+    depends_on:
+      - mysql
+    networks:
+      - dotnet-network
+
+volumes:
+  mysql-data:
+
+networks:
+  dotnet-network:
