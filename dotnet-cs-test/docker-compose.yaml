@@ -19,7 +19,7 @@ services:
   dotnetapp:
     build: .
     ports:
-      - "9000:9000"
+      - "8090:80"
     depends_on:
       - mysql
     networks:

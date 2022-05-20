@@ -164,20 +164,13 @@ namespace TestProject1
         public async Task Test_Me_Access_Denied()
         {
             // Arrange
-            var response = await _client.PostAsync("/authenticate", new StringContent(
-                JsonConvert.SerializeObject(new User
-                {
-                    Username = "drissakone",
-                    Password = "123"
-                }), 
-                Encoding.UTF8, 
-                "application/json"));
+            var response = await _client.GetAsync("/me");
             
             _output.WriteLine(response.ToString());
             response.EnsureSuccessStatusCode();
 
             // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
     }
 }
