@@ -2,7 +2,8 @@
 services:
 
   mysql:
-    image: mysql:latest
+    image: mysql:8.0.22
+    container_name: mysql_container
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
@@ -18,8 +19,9 @@ services:
 
   dotnetapp:
     build: .
+    container_name: dotnetapp_container
     ports:
-      - "8090:80"
+      - "5000:80"
     depends_on:
       - mysql
     networks:
