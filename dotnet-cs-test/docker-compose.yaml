@@ -6,6 +6,7 @@ services:
     container_name: mysql_container
     volumes:
       - mysql-data:/var/lib/mysql
+      - "~/DB/setup.sql:/docker-entrypoint-initdb.d/1.sql"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: root
