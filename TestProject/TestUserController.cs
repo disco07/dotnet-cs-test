@@ -72,8 +72,6 @@ namespace TestProject1
 
             var response = await _client.GetAsync("/user");
 
-            _output.WriteLine(response.ToString());
-
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
