@@ -13,26 +13,9 @@ namespace TestProject1
     public class TestDefaultController
     {
         private readonly HttpClient _client;
-        private readonly ApiDbContext _context;
-        private readonly JwtTokenUtil _jwt;
-        private readonly string _myuuidAsString;
-        private readonly ITestOutputHelper _output;
-
-        public TestDefaultController(ITestOutputHelper output)
+        
+        public TestDefaultController()
         {
-            _jwt = new JwtTokenUtil();
-
-            _output = output;
-
-            const string connectionString = "server=127.0.0.1;database=quest_web;user=root;password=;";
-            var builder = new DbContextOptionsBuilder<ApiDbContext>();
-            builder.UseMySql(connectionString);
-            var options = builder.Options;
-            _context = new ApiDbContext(options);
-
-            var myuuid = Guid.NewGuid();
-            _myuuidAsString = myuuid.ToString();
-
             _client = new TestClientProvider().Client;
         }
 

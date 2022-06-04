@@ -1,11 +1,8 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using quest_web;
 using quest_web.Controllers;
@@ -31,19 +28,10 @@ namespace TestProject1
 
             _output = output;
 
-            const string connectionString = "server=localhost;port=3306;database=quest_web;user=drissa;password=root;";
-            var builder = new DbContextOptionsBuilder<ApiDbContext>();
-            builder.UseMySql(connectionString);
-            var options = builder.Options;
-            _context = new ApiDbContext(options);
-
             var myuuid = Guid.NewGuid();
             _myuuidAsString = myuuid.ToString();
 
             _client = new TestClientProvider().Client;
-            _client.DefaultRequestHeaders
-                .Accept
-                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         [Fact]
