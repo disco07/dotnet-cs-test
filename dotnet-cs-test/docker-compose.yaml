@@ -4,9 +4,6 @@ services:
   mysql:
     image: mysql:8.0.22
     container_name: mysql_container
-    volumes:
-      - mysql-data:/var/lib/mysql
-      - "~/DB/setup.sql:/docker-entrypoint-initdb.d/1.sql"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: root
@@ -15,6 +12,9 @@ services:
       TZ: Europe/Brussels
     ports:
       - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./DB/script.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - dotnet-network
 
@@ -25,6 +25,8 @@ services:
       - "5000:80"
     depends_on:
       - mysql
+    environment:
+      - DBHOST=mysql
     networks:
       - dotnet-network
 
