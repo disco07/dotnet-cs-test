@@ -5,16 +5,15 @@ services:
     image: mysql:8.0.22
     container_name: mysql_container
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_USER: drissa
       MYSQL_PASSWORD: root
       MYSQL_DATABASE: quest_web
-      TZ: Europe/Brussels
     ports:
       - "3306:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
       - ./DB/script.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql-data:/var/lib/mysql
     networks:
       - dotnet-network
 
