@@ -8,15 +8,17 @@ WORKDIR /app
 EXPOSE 80/tcp
 
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
-WORKDIR /src
-COPY ["dotnet-cs-test.csproj", "./"]
-RUN dotnet restore "dotnet-cs-test.csproj"
+
+COPY ["*.sln", "."]
+COPY ["./dotnet-cs-test/**.csproj", "./dotnet-cs-test/"]
+COPY ["./TestProject/**.csproj", "./TestProject/"]
+RUN dotnet restore 
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "dotnet-cs-test.csproj" -c Release -o /app/build
+
+RUN dotnet build -c release --no-restore
 
 FROM build AS publish
-RUN dotnet publish "dotnet-cs-test.csproj" -c Release -o /app/publish
+RUN dotnet publish "./dotnet-cs-test/dotnet-cs-test.csproj" -c release -o /app/publish --no-restore
 
 FROM base AS final
 WORKDIR /app

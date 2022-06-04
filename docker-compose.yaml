@@ -12,7 +12,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./DB/script.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./dotnet-cs-test/DB/script.sql:/docker-entrypoint-initdb.d/init.sql
       - mysql-data:/var/lib/mysql
     networks:
       - dotnet-network
