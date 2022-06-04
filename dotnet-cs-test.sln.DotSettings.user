@@ -4,5 +4,6 @@
     &lt;TestId&gt;xUnit::458923A0-A539-4CD5-B838-9396A015BF81::.NETCoreApp,Version=v3.1::TestProject1.TestAuthentification&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::458923A0-A539-4CD5-B838-9396A015BF81::.NETCoreApp,Version=v3.1::TestProject1.TestDefaultController&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::458923A0-A539-4CD5-B838-9396A015BF81::.NETCoreApp,Version=v3.1::TestProject1.TestUserController.Test_GetUser_Bad_Request&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::458923A0-A539-4CD5-B838-9396A015BF81::.NETCoreApp,Version=v3.1::TestProject1.TestUserController.Test_GetUser_Work&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -75,7 +75,7 @@ namespace TestProject1
             _output.WriteLine(response.ToString());
 
             // Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }
