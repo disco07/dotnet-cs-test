@@ -17,6 +17,8 @@ COPY . .
 
 RUN dotnet build -c release --no-restore
 
+RUN dotnet test -c release --no-build
+
 FROM build AS publish
 RUN dotnet publish "./dotnet-cs-test/dotnet-cs-test.csproj" -c release -o /app/publish --no-restore
 

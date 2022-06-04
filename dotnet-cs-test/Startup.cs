@@ -26,9 +26,11 @@ namespace quest_web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("DefaultConnection") ??
+                                   "server=localhost;database=quest_web;user=root;password=;";
             services.AddControllers();
             services.AddDbContext<ApiDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseMySql(connectionString));
             var secret = "etna_quest_jwt_secret_key";
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

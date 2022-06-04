@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,7 @@ namespace TestProject1
 
             _output = output;
 
-            const string connectionString = "server=127.0.0.1;database=quest_web;user=root;password=;";
+            const string connectionString = "server=localhost;port=3306;database=quest_web;user=drissa;password=root;";
             var builder = new DbContextOptionsBuilder<ApiDbContext>();
             builder.UseMySql(connectionString);
             var options = builder.Options;
@@ -40,6 +41,9 @@ namespace TestProject1
             _myuuidAsString = myuuid.ToString();
 
             _client = new TestClientProvider().Client;
+            _client.DefaultRequestHeaders
+                .Accept
+                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         [Fact]
@@ -50,14 +54,18 @@ namespace TestProject1
             {
                 Username = "Kone"
             };
-            var controller = new AuthenticationController(_context, _jwt);
-
+            
             // Act
-            var result = controller.Register(user);
+            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync(
+                "/register", 
+                content
+                );
+
+            _output.WriteLine(response.ToString());
 
             // Assert
-            var objectResponse = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal(400, objectResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
@@ -69,16 +77,21 @@ namespace TestProject1
                 Username = "Kone" + _myuuidAsString,
                 Password = "123"
             };
-            _output.WriteLine(_myuuidAsString);
-            var controller = new AuthenticationController(_context, _jwt);
-
+            
             // Act
-            controller.Register(user);
-            var result = controller.Register(user);
+            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+            await _client.PostAsync(
+                "/register", 
+                content
+            );
+            
+            var response = await _client.PostAsync(
+                "/register", 
+                content
+            );
 
             // Assert
-            var objectResponse = Assert.IsType<ConflictObjectResult>(result);
-            Assert.Equal(409, objectResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
         }
 
         [Fact]
@@ -90,15 +103,18 @@ namespace TestProject1
                 Username = "Kone" + _myuuidAsString,
                 Password = "123"
             };
-            _output.WriteLine(_myuuidAsString);
-            var controller = new AuthenticationController(_context, _jwt);
-
+            
             // Act
-            var result = controller.Register(user);
+            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync(
+                "/register", 
+                content
+            );
+            
+            _output.WriteLine(response.ToString());
 
             // Assert
-            var objectResponse = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(201, objectResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
 
         [Fact]
@@ -110,16 +126,22 @@ namespace TestProject1
                 Username = "drissakone",
                 Password = "123"
             };
-            var controller = new AuthenticationController(_context, _jwt);
 
             // Act
-            controller.Register(user);
-            var result = controller.Authenticate(user);
+            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+            await _client.PostAsync(
+                "/register",
+                content
+            );
+            var response = await _client.PostAsync(
+                "/authenticate",
+                content
+            );
+            var responseContent = await response.Content.ReadAsStringAsync();
+            _output.WriteLine(responseContent);
 
             // Assert
-            var objectResponse = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(200, objectResponse.StatusCode);
-            _output.WriteLine(result.ToString());
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Fact]
@@ -129,16 +151,19 @@ namespace TestProject1
             var user = new User
             {
                 Username = "Kone",
-                Password = "1234"
+                Password = "1234fdsff"
             };
-            var controller = new AuthenticationController(_context, _jwt);
 
             // Act
-            var result = controller.Authenticate(user);
+            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync(
+                "/authenticate",
+                content
+            );
+            _output.WriteLine(response.ToString());
 
             // Assert
-            var objectResponse = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(401, objectResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
         [Fact]
@@ -153,11 +178,15 @@ namespace TestProject1
             var controller = new AuthenticationController(_context, _jwt);
 
             // Act
-            var result = controller.Authenticate(user);
+            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync(
+                "/authenticate",
+                content
+            );
+            _output.WriteLine(response.ToString());
 
             // Assert
-            var objectResponse = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(401, objectResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
         [Fact]
@@ -167,7 +196,6 @@ namespace TestProject1
             var response = await _client.GetAsync("/me");
             
             _output.WriteLine(response.ToString());
-            response.EnsureSuccessStatusCode();
 
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
