@@ -160,7 +160,6 @@ namespace TestProject1
                 "/authenticate",
                 content
             );
-            _output.WriteLine(response.ToString());
 
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -183,7 +182,6 @@ namespace TestProject1
                 "/authenticate",
                 content
             );
-            _output.WriteLine(response.ToString());
 
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -199,6 +197,38 @@ namespace TestProject1
 
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+        
+        [Fact]
+        public async Task Test_Me_Work()
+        {
+            // Arrange
+            var user = new User
+            {
+                Username = "drissakone",
+                Password = "123"
+            };
+            
+            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+            await _client.PostAsync(
+                "/register",
+                content
+            );
+            var login = await _client.PostAsync(
+                "/authenticate",
+                content
+            );
+
+            // Act
+            var responseContent = await login.Content.ReadAsStringAsync();
+
+            _client.DefaultRequestHeaders.Add("Authorization", "Bearer " + responseContent.Replace("\"", ""));
+            var response = await _client.GetAsync("/me");
+            
+            _output.WriteLine(response.ToString());
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }
