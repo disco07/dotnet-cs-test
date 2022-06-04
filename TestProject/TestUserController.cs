@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using quest_web;
+using quest_web.Models;
 using quest_web.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace TestProject1
@@ -26,6 +32,18 @@ namespace TestProject1
             _client = new TestClientProvider().Client;
         }
         
-        
+        [Fact]
+        public async Task Test_GetUser_Bad_Request()
+        {
+            // Arrange
+
+            // Act
+            var response = await _client.GetAsync("/user");
+
+            _output.WriteLine(response.ToString());
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
     }
 }
